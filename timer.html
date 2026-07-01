@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Speed Countdown</title>
+
+<style>
+
+body{
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+    margin-top:60px;
+}
+
+#timer{
+    font-size:80px;
+    margin:30px;
+}
+
+button{
+    font-size:18px;
+    padding:10px 18px;
+    margin:4px;
+}
+
+input{
+    width:70px;
+    font-size:18px;
+    text-align:center;
+}
+
+.speed{
+    margin-top:20px;
+}
+
+.active{
+    background:#4CAF50;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Countdown Timer</h2>
+
+Minutes:
+<input id="minutes" type="number" value="5" min="0">
+
+Seconds:
+<input id="seconds" type="number" value="0" min="0" max="59">
+
+<br><br>
+
+<button onclick="start()">Start</button>
+<button onclick="pause()">Pause</button>
+<button onclick="resetTimer()">Reset</button>
+
+<div id="timer">05:00</div>
+
+<div class="speed">
+
+<h3>Speed</h3>
+
+<button onclick="setSpeed(0)">0×</button>
+<button onclick="setSpeed(0.5)">0.5×</button>
+<button onclick="setSpeed(1)" class="active">1×</button>
+<button onclick="setSpeed(2)">2×</button>
+<button onclick="setSpeed(4)">4×</button>
+<button onclick="setSpeed(8)">8×</button>
+
+</div>
+
+<script>
+
+let speed = 1;
+
+let running = false;
+
+let startingTime = 300;
+
+let remaining = startingTime;
+
+function updateDisplay(){
+
+let mins = Math.floor(remaining/60);
+
+let secs = Math.floor(remaining%60);
+
+document.getElementById("timer").textContent =
+String(mins).padStart(2,'0')
++ ":"
++ String(secs).padStart(2,'0');
+
+}
+
+function start(){
+
+if(!running){
+
+running = true;
+
+}
+
+}
+
+function pause(){
+
+running = false;
+
+}
+
+function resetTimer(){
+
+running = false;
+
+let mins = parseInt(document.getElementById("minutes").value) || 0;
+
+let secs = parseInt(document.getElementById("seconds").value) || 0;
+
+startingTime = mins*60 + secs;
+
+remaining = startingTime;
+
+updateDisplay();
+
+}
+
+function setSpeed(value){
+
+speed = value;
+
+document.querySelectorAll(".speed button")
+.forEach(b=>b.classList.remove("active"));
+
+event.target.classList.add("active");
+
+}
+
+setInterval(()=>{
+
+if(running){
+
+remaining -= 0.1*speed;
+
+if(remaining <= 0){
+
+remaining = 0;
+
+running = false;
+
+}
+
+updateDisplay();
+
+}
+
+},100);
+
+resetTimer();
+
+</script>
+
+</body>
+
+</html>
